@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CreateThreadsTest extends TestCase
 {
@@ -32,7 +31,7 @@ class CreateThreadsTest extends TestCase
         // 该用户创建一篇新的帖子
         // 当我们访问帖子时 我们可以看到这篇新的帖子
 
-        $this->be(factory('App\User')->create());
+        $this->actingAs(factory('App\User')->create());
 
         $thread = factory('App\Models\Thread')->make();
         $this->post('/threads', $thread->toArray());
