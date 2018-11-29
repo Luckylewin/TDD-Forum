@@ -15,10 +15,13 @@ class CreateThreadsTest extends TestCase
      */
     public function guests_may_not_create_thread()
     {
-        $this->expectException('Illuminate\Auth\AuthenticationException');
+        $this->withExceptionHandling();
 
-        $thread = factory('App\Models\Thread')->make();
-        $this->post('/threads', $thread->toArray());
+        $this->get('/threads/create')
+             ->assertRedirect('/login');
+
+        $this->post('/threads', [])
+             ->assertRedirect('/login');
     }
 
     /**
@@ -31,23 +34,13 @@ class CreateThreadsTest extends TestCase
         // 该用户创建一篇新的帖子
         // 当我们访问帖子时 我们可以看到这篇新的帖子
 
-        $this->actingAs(factory('App\User')->create());
+        $this->signIn();
 
-        $thread = factory('App\Models\Thread')->make();
+        $thread = create('App\Models\Thread');
         $this->post('/threads', $thread->toArray());
 
         $this->get($thread->path())
              ->assertSee($thread->title)
              ->assertSee($thread->body);
-    }
-
-    /**
-     * @test
-     */
-    public function guests_may_not_see_the_create_thread_page()
-    {
-        $this->withExceptionHandling()
-             ->get('/threads/create')
-             ->assertRedirect('/login');
     }
 }

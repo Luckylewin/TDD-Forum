@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -10,6 +11,9 @@ class ThreadTest extends TestCase
 {
     use DatabaseMigrations;
 
+    /**
+     * @var Thread
+     */
     public $thread;
 
     public function setUp()
@@ -47,5 +51,24 @@ class ThreadTest extends TestCase
         $this->assertCount(1, $this->thread->replies);
     }
 
+    /**
+     * @test
+     */
+    public function a_thread_belongs_to_channel()
+    {
+        $thread = $this->thread;
+
+        $this->assertInstanceOf('App\Models\Channel', $thread->channel);
+    }
+
+    /**
+     * @test
+     */
+    public function a_thread_can_make_a_string_path()
+    {
+        $thread = $this->thread;
+
+        $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+    }
 
 }

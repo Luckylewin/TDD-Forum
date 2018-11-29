@@ -20,7 +20,7 @@ abstract class TestCase extends BaseTestCase
         $this->disableExceptionHandling();
     }
 
-    protected function signIn($user)
+    protected function signIn($user = null)
     {
         $user = $user ?: create('App\User');
 

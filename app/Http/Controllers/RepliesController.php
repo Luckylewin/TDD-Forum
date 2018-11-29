@@ -15,13 +15,13 @@ class RepliesController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Thread $thread)
+    public function store($channelID, Thread $thread)
     {
         $thread->addReply([
             'body'    => request('body'),
             'user_id' => auth()->id()
         ]);
 
-        return redirect()->back();
+        return back();
     }
 }
