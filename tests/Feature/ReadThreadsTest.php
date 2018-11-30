@@ -29,7 +29,7 @@ class ReadThreadsTest extends TestCase
     }
 
     /**
-     * @test
+     * @test 用户可以看到帖子列表
      */
     public function a_user_can_browse_all_the_threads()
     {
@@ -37,7 +37,7 @@ class ReadThreadsTest extends TestCase
     }
 
     /**
-     * @test
+     * @test 用户可以看帖子详情
      */
     public function a_user_can_browse_a_single_thread()
     {
@@ -45,7 +45,7 @@ class ReadThreadsTest extends TestCase
     }
 
     /**
-     * @test
+     * @test 用户可以回复帖子
      */
     public function a_user_can_read_replies_that_are_associated_with_a_thread()
     {
@@ -55,5 +55,19 @@ class ReadThreadsTest extends TestCase
         ]);
         // 用户一定会看到 reply
         $this->get($this->thread->path())->assertSee($reply->body);
+    }
+
+    /**
+     * @test 用户可以根据频道来过滤帖子
+     */
+    public function a_user_can_filter_threads_according_to_a_channel()
+    {
+        $channel = create('App\Models\Channel');
+        $threadInChannel = create('App\Models\Thread', ['channel_id' => $channel->id]);
+        $threadNotInChannel = create('App\Models\Thread');
+
+        $this->get('/threads/' . $channel->slug)
+             ->assertSee($threadInChannel->title)
+             ->assertDontSee($threadNotInChannel->title);
     }
 }

@@ -39,6 +39,20 @@
                         &nbsp;<li><a href="{{ url('/threads') }}">All Threads</a></li>
                     </ul>
 
+                    <ul class="nav navbar-nav navbar-left">
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                Channels <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach(\App\Models\Channel::query()->orderBy('created_at', 'desc')->limit(10)->get() as $channel)
+                                    <li><a href="/threads/{{ $channel->slug }}">{{ $channel->name }}</a> </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    </ul>
+
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
@@ -52,6 +66,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

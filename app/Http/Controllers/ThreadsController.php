@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 
@@ -16,9 +17,13 @@ class ThreadsController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index()
+    public function index(Channel $channel)
     {
-        $threads = Thread::query()->latest()->get();
+        if ($channel->exists) {
+            $threads = $channel->threads()->get();
+        } else {
+            $threads = Thread::query()->latest()->get();
+        }
 
         return view('threads.index', compact('threads'));
     }

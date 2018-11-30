@@ -1,0 +1,28 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lychee
+ * Date: 2018/11/30
+ * Time: 18:01
+ */
+
+namespace Tests\Unit;
+
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
+class ChannelTest extends TestCase
+{
+    use DatabaseMigrations;
+
+    /**
+     * @test 一个频道由 threads 组成
+     */
+    public function a_channel_consist_of_threads()
+    {
+        $channel = create('App\Models\Channel');
+        $thread = create('App\Models\Thread', ['channel_id' => $channel->id]);
+
+        $this->assertTrue($channel->threads->contains($thread));
+    }
+}
