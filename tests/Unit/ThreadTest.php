@@ -54,7 +54,7 @@ class ThreadTest extends TestCase
     /**
      * @test
      */
-    public function a_thread_belongs_to_channel()
+    public function a_thread_belongs_to_a_channel()
     {
         $thread = $this->thread;
 
