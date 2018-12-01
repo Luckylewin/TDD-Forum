@@ -17,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
        Carbon::setLocale('zh');
-       \View::share('channels', Channel::query()->limit(10)->orderBy('created_at', 'desc')->get());
+       view()->composer('*', function ($view) {
+           $view->with('channels', Channel::query()->limit(10)->orderBy('created_at', 'desc')->get());
+       });
     }
 
     /**
