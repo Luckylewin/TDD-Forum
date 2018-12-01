@@ -37,6 +37,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         &nbsp;<li><a href="{{ url('/threads') }}">All Threads</a></li>
+                        &nbsp;<li><a href="{{ url('/threads/create') }}">New Threads</a></li>
                     </ul>
 
                     <ul class="nav navbar-nav navbar-left">
