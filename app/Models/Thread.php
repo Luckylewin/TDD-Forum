@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\Filters;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +28,11 @@ class Thread extends Model
      public function channel()
      {
          return $this->belongsTo(Channel::class);
+     }
+
+     public function ScopeFilter($query, Filters $filters)
+     {
+         return $filters->apply($query);
      }
 
      public function addReply($reply)
