@@ -12,7 +12,7 @@ namespace App\Filters;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-class Filters
+abstract class Filters
 {
     /**
      * @var Request

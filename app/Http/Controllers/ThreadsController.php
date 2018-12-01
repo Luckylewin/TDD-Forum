@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\Filters;
-use App\Filters\ThreadFilters;
+use App\Filters\ThreadsFilters;
 use App\Models\Channel;
 use App\Models\Thread;
-use App\User;
 use Illuminate\Http\Request;
-
 
 class ThreadsController extends Controller
 {
@@ -20,7 +17,7 @@ class ThreadsController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadsFilters $filters)
     {
         $threads = $this->getThreads($channel, $filters);
         return view('threads.index', compact('threads'));
@@ -51,10 +48,13 @@ class ThreadsController extends Controller
 
     public function show($channelId,Thread $thread)
     {
-        return view('threads.show', compact('thread'));
+        return view('threads.show', [
+            'thread' => $thread,
+            'replies' => $thread->replies()->paginate(10)
+        ]);
     }
 
-    protected function getThreads(Channel $channel,ThreadFilters $filters)
+    protected function getThreads(Channel $channel, ThreadsFilters $filters)
     {
         $threads = Thread::query()->latest()->filter($filters);
 

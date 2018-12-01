@@ -12,7 +12,7 @@ namespace App\Filters;
 use App\User;
 
 
-class ThreadFilters extends Filters
+class ThreadsFilters extends Filters
 {
 
 
