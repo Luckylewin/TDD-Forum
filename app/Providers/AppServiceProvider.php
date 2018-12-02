@@ -18,7 +18,10 @@ class AppServiceProvider extends ServiceProvider
     {
        Carbon::setLocale('zh');
        view()->composer('*', function ($view) {
-           $view->with('channels', Channel::query()->limit(10)->orderBy('created_at', 'desc')->get());
+           $channels = \Cache::rememberForever('channels', function(){
+                return Channel::query()->limit(10)->orderBy('created_at', 'desc')->get();
+           });
+           $view->with('channels', $channels);
        });
     }
 
@@ -29,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment() === 'local') {
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
+        }
     }
 }

@@ -26,7 +26,10 @@ class Thread extends Model
 
      public function replies()
      {
-         return $this->hasMany(Reply::class)->orderBy('created_at', 'desc');
+         return $this->hasMany(Reply::class)
+                     ->orderBy('created_at', 'desc')
+                     ->withCount('favorites')
+                     ->with('owner');
      }
 
      public function creator()
