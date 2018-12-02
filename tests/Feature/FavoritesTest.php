@@ -21,7 +21,8 @@ class FavoritesTest extends TestCase
      */
     public function an_authenticated_user_can_favorite_any_reply()
     {
-        // 如果已经登录的用户发送了 "favorite"
+        // 如果已经登录的用户
+        // 发送了 "favorite"
         // 那么将会记录到数据表中
         $this->signIn();
         $reply = create('App\Models\Reply');
@@ -54,7 +55,7 @@ class FavoritesTest extends TestCase
             $this->post($url);
             $this->post($url);
         } catch (\Exception $e) {
-            $this->fail('不能插入相同的一条记录');
+            $this->fail($e->getMessage());
         }
 
         $this->assertCount(1, $reply->favorites);
