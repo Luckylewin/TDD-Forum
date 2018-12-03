@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
      protected $guarded = [];
+     protected $with = ['creator', 'channel'];
 
      public static function boot()
      {
@@ -27,9 +28,7 @@ class Thread extends Model
      public function replies()
      {
          return $this->hasMany(Reply::class)
-                     ->orderBy('created_at', 'desc')
-                     ->withCount('favorites')
-                     ->with('owner');
+                     ->orderBy('created_at', 'desc');
      }
 
      public function creator()
