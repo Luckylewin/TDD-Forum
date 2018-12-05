@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reply;
+use App\Models\Thread;
 use Tests\TestCase;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -70,7 +72,40 @@ class CreateThreadsTest extends TestCase
             ->assertSessionMissing('channel_id');
     }
 
-    public function publishThread($overrides = [])
+    /**
+     * 测试帖子删除
+     * @test
+     */
+    public function a_thread_can_be_deleted()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $reply = create(Reply::class, ['thread_id' => $thread->id]);
+
+        $response = $this->json('DELETE', $thread->path());
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
+
+    /**
+     * 游客不能删除话题
+     * @test
+     */
+    public function guests_cannot_delete_threads()
+    {
+        $thread = create(Thread::class);
+
+        $this->withExceptionHandling()
+             ->delete($thread->path())
+             ->assertRedirect('/login');
+    }
+
+    protected function publishThread($overrides = [])
     {
         $this->withExceptionHandling()->signIn();
 
