@@ -19,6 +19,7 @@ Auth::routes();
 
 Route::get('/', 'ThreadsController@index');
 
+//帖子
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/threads', 'ThreadsController@index');
 Route::get('/threads/create', 'ThreadsController@create');
@@ -27,6 +28,8 @@ Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('/threads', 'ThreadsController@store');
 Route::post('/threads/{channel}/{thread}/{replies}', 'RepliesController@store');
 
+// 用户个人中心
+Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 
 //Route::resource('threads', 'ThreadsController');
 

@@ -7,7 +7,7 @@
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="#">
+                        <a href="{{ route('profile', $thread->creator->name) }}">
                             {{ $thread->creator->name }} 发表了
                         </a>
                         {{ $thread->title }}
