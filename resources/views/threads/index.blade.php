@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                @foreach ($threads as $thread)
+                @forelse ($threads as $thread)
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="level">
@@ -23,7 +23,11 @@
 
                     </div>
                     <hr>
-                @endforeach
+                @empty
+                    <div class="well text-center">
+                        <p><p>该频道没有话题~</p></p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>

@@ -11,8 +11,7 @@
                        </h1>
                    </div>
 
-                   @if($threads->count())
-                       @foreach($threads as $thread):
+                       @forelse($threads as $thread):
                        <div class="panel panel-default">
                            <div class="panel-heading">
                                <div class="level">
@@ -31,12 +30,12 @@
                                {{ $thread->body }}
                            </div>
                        </div>
-                       @endforeach
-                   @else
-                       <div class="well well-lg text-center">
-                           该用户没有发布过帖子
-                       </div>
-                   @endif
+                       @empty
+                           <div class="well well-lg text-center">
+                               该用户没有发布过帖子
+                           </div>
+                       @endforelse
+
                    {{ $threads->links() }}
                </div>
            </div>
