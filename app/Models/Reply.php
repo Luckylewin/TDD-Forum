@@ -24,4 +24,10 @@ class Reply extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    // 关联关系
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
+    }
+
 }

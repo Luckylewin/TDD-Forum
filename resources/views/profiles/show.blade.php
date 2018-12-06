@@ -11,32 +11,18 @@
                        </h1>
                    </div>
 
-                       @forelse($threads as $thread):
-                       <div class="panel panel-default">
-                           <div class="panel-heading">
-                               <div class="level">
-                                   <div class="flex">
-                                       <a href="{{ route('profile', $thread->creator->name) }}">{{ $thread->creator->name }}</a> 发表于
+                        @forelse($activities as $date => $activity)
+                           <h3 class="page-header">{{ $date }}</h3>
 
-                                       <a href="/threads/{{$thread->channel->name}}">{{ $thread->channel->name }}</a>
-
-                                       / {{ $thread->title }}
-                                   </div>
-
-                                   <span>{{ $thread->created_at->diffForHumans() }}</span>
-                               </div>
-                           </div>
-                           <div class="panel-body">
-                               {{ $thread->body }}
-                           </div>
-                       </div>
-                       @empty
+                           @foreach($activity as $record)
+                               @include("profiles.activities.{$record->type}", ['activity' => $record])
+                           @endforeach
+                        @empty
                            <div class="well well-lg text-center">
-                               该用户没有发布过帖子
+                               该用户没有动态
                            </div>
-                       @endforelse
+                        @endforelse
 
-                   {{ $threads->links() }}
                </div>
            </div>
        </div>
