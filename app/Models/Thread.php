@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Filters\Filters;
+use App\Traits\RecordsActivity;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+     use RecordsActivity;
+
      protected $guarded = [];
      protected $with = ['creator','channel'];
 
@@ -20,6 +23,7 @@ class Thread extends Model
          });
          // 删除对应的回复
          static::deleting(function ($thread) {
+             /* @var $thread Thread */
              $thread->replies()->delete();
          });
      }
@@ -54,4 +58,7 @@ class Thread extends Model
      {
          $this->replies()->create($reply);
      }
+
 }
+
+

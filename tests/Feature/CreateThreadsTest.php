@@ -76,10 +76,11 @@ class CreateThreadsTest extends TestCase
      * 测试帖子删除
      * @test
      */
-    public function authorized_user_cant_delete_thread()
+    public function authorized_users_cant_delete_threads()
     {
         $this->signIn();
         // 用户自己的文章
+
         $thread = create(Thread::class, ['user_id' => auth()->id()]);
 
         $reply = create(Reply::class, ['thread_id' => $thread->id]);
@@ -96,17 +97,15 @@ class CreateThreadsTest extends TestCase
      * 游客不能删除话题
      * @test
      */
-    public function unauthorized_user_cannot_delete_threads()
+    public function unauthorized_users_may_not_delete_threads()
     {
         $thread = create(Thread::class);
         // 游客会跳转到登录
         $this->withExceptionHandling();
-        $this->delete($thread->path())
-             ->assertRedirect('/login');
+        $this->delete($thread->path())->assertRedirect('/login');
         // 不能删除不是自己的文章
         $this->signIn();
-        $this->delete($thread->path())
-             ->assertStatus(403);
+        $this->delete($thread->path())->assertStatus(403);
     }
 
     protected function publishThread($overrides = [])

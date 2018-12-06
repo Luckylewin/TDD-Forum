@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\RecordsActivity;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Favoritable;
@@ -9,6 +10,7 @@ use App\Traits\Favoritable;
 class Reply extends Model
 {
     use Favoritable;
+    use RecordsActivity;
 
     protected $guarded = [];
     protected $with = ['owner', 'favorites']; // 注意此处
