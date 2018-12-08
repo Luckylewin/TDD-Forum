@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
 use App\Models\Reply;
 use App\Models\Thread;
 use Tests\TestCase;
@@ -79,10 +80,9 @@ class CreateThreadsTest extends TestCase
     public function authorized_users_cant_delete_threads()
     {
         $this->signIn();
+
         // 用户自己的文章
-
         $thread = create(Thread::class, ['user_id' => auth()->id()]);
-
         $reply = create(Reply::class, ['thread_id' => $thread->id]);
 
         $response = $this->json('DELETE', $thread->path());
@@ -91,6 +91,10 @@ class CreateThreadsTest extends TestCase
 
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+
+        // 相关的信息流被删除
+        $this->assertEquals(0, Activity::count());
+
     }
 
     /**

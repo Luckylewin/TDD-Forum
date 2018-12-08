@@ -13,11 +13,15 @@ Trait RecordsActivity
 
         // 记录一个动作流
         foreach (static::getActivityToRecord() as $event) {
-            static::created(function ($thread) use ($event) {
-                /* @var $thread RecordsActivity */
-                $thread->recordActivity($event);
+            static::created(function ($model) use ($event) {
+                /* @var $model RecordsActivity */
+                $model->recordActivity($event);
             });
         }
+
+        static::deleted(function ($model){
+            $model->activity()->delete();
+        });
     }
 
     public static function getActivityToRecord()

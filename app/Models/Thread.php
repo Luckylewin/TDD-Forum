@@ -23,8 +23,8 @@ class Thread extends Model
          });
          // 删除对应的回复
          static::deleting(function ($thread) {
-             /* @var $thread Thread */
-             $thread->replies()->delete();
+             // 逐条删除 触发 Reply 删除事件
+             $thread->replies->each->delete();
          });
      }
 
