@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Activity;
 use App\Models\Reply;
 use App\Models\Thread;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -14,6 +15,7 @@ class ActivityTest extends TestCase
     use DatabaseMigrations;
 
     /**
+     * 当帖子发表时新增信息流
      * @test
      */
     public function it_records_activity_when_a_thread_is_created()
@@ -35,6 +37,7 @@ class ActivityTest extends TestCase
     }
 
     /**
+     * 当回复时将会新增信息流
      * @test
      */
     public function it_records_activity_when_a_reply_is_created()
@@ -44,5 +47,34 @@ class ActivityTest extends TestCase
         $reply = create(Reply::class);
 
         $this->assertEquals(2, Activity::count());
+    }
+
+    /**
+     * 模型获取信息流
+     * @test
+     */
+    public function it_fetches_a_seed_for_any_user()
+    {
+        // 假设我们有一篇 帖子 和 一篇一个星期前的帖子
+        // 当我们获取他们的信息流
+        // 它会返回正确的格式
+
+        $this->signIn();
+
+        $user = auth()->user();
+
+        create(Thread::class, ['user_id' => auth()->id()], 2);
+
+        $user->activity()->first()->update(['created_at' => Carbon::now()->subWeek()]);
+
+        $feed = Activity::feed(auth()->user(), 2);
+
+        $this->assertTrue($feed->keys()->contains(
+            Carbon::now()->format('Y-m-d')
+        ));
+
+        $this->assertTrue($feed->keys()->contains(
+            Carbon::now()->subWeek()->format('Y-m-d')
+        ));
     }
 }
