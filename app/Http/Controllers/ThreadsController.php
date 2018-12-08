@@ -48,7 +48,8 @@ class ThreadsController extends Controller
             'body' => request('body'),
         ]);
 
-        return redirect($thread->path());
+        return redirect($thread->path())
+            ->with('flash','话题已经发布！');
     }
 
     public function destroy($channel, Thread $thread)
@@ -61,7 +62,8 @@ class ThreadsController extends Controller
             return response([], 204);
         }
 
-        return redirect('/threads');
+        return redirect('/threads')
+                ->with('flash','话题已删除');
     }
 
     public function show($channelId,Thread $thread)
