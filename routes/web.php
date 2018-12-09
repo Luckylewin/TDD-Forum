@@ -30,12 +30,15 @@ Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 Route::post('/threads/{channel}/{thread}/{replies}', 'RepliesController@store');
 
 
+
 // 用户个人中心
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 
 //Route::resource('threads', 'ThreadsController');
-
+// 发表回复
 Route::post('/threads/{thread}/replies', 'RepliesController@store');
-
+// 删除回复
+Route::delete('/replies/{reply}', 'RepliesController@destroy');
+// 点赞
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 

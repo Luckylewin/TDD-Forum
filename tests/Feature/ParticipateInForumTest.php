@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reply;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -37,7 +38,10 @@ class ParticipateInForumTest extends TestCase
              ->assertSee($reply->body);
     }
 
-    /** @test */
+    /**
+     * body 必填
+     * @test
+     */
     public function a_reply_requires_a_body()
     {
         $this->withExceptionHandling()->signIn();
@@ -48,4 +52,40 @@ class ParticipateInForumTest extends TestCase
         $this->post($thread->path() . '/replies', $reply->toArray())
              ->assertSessionHasErrors('body');
     }
+
+    /**
+     * 无权限用户不能删除评论
+     * @test
+     */
+    public function unauthorized_users_cannot_delete_replies()
+    {
+        $this->withExceptionHandling();
+
+        $reply = create(Reply::class);
+
+        $this->delete("/replies/{$reply->id}")
+             ->assertRedirect('/login');
+
+        $this->signIn()
+             ->delete("replies/{$reply->id}")
+             ->assertStatus(403);
+    }
+
+    /**
+     * 有权限的用户可以删除评论
+     * @test
+     */
+    public function authorized_users_can_delete_replies()
+    {
+        $this->withExceptionHandling();
+
+        $this->signIn();
+
+        $reply = create(Reply::class, ['user_id' => auth()->id()]);
+
+        $this->delete("/replies/{$reply->id}")->assertStatus(302);
+
+        $this->assertDatabaseMissing('replies',['id' => $reply->id]);
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reply;
 use App\Models\Thread;
 
 class RepliesController extends Controller
@@ -24,7 +25,15 @@ class RepliesController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return back()
-            ->with('flash','已发表回复');
+        return back()->with('flash','已发表回复');
+    }
+
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->delete();
+
+        return back()->with('flash', '评论已删除');
     }
 }
