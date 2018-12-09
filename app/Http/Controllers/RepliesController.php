@@ -34,6 +34,10 @@ class RepliesController extends Controller
 
         $reply->delete();
 
+        if (request()->wantsJson()) {
+            return response(['status' => 'Reply deleted']);
+        }
+
         return back()->with('flash', '评论已删除');
     }
 

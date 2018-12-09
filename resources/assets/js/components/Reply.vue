@@ -24,6 +24,15 @@
                 this.editing = false;
 
                 flash('已更新');
+            },
+
+            destroy() {
+                let url = '/replies/' + this.attributes.id;
+                axios.delete(url);
+
+                $(this.$el).fadeOut(300, () => {
+                    flash('已删除');
+                });
             }
         }
     }

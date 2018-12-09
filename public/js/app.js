@@ -43904,7 +43904,7 @@ exports = module.exports = __webpack_require__(9)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
 
 // exports
 
@@ -43942,6 +43942,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editing = false;
 
             flash('已更新');
+        },
+        destroy: function destroy() {
+            var url = '/replies/' + this.attributes.id;
+            axios.delete(url);
+
+            $(this.$el).fadeOut(300, function () {
+                flash('已删除');
+            });
         }
     }
 });

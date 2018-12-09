@@ -47,12 +47,8 @@
             <div class="panel-footer level">
 
                 <button class="btn btn-xs mr-1" @click="editing = true">编辑</button>
+                <button class="btn btn-danger btn-xs mr-1" @click="destroy">删除</button>
 
-                <form action="/replies/{{ $reply->id }}" method="post">
-                    {{ csrf_field() }}
-                    {{ method_field('DELETE') }}
-                    <button type="submit" class="btn btn-danger btn-xs">删除</button>
-                </form>
             </div>
         @endcan
     </div>
