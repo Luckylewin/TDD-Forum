@@ -14,6 +14,7 @@ class Reply extends Model
 
     protected $guarded = [];
     protected $with = ['owner', 'favorites']; // 注意此处
+    protected $appends = ['favoritesCount', 'isFavorited'];
 
     /**
      * 话题创建者

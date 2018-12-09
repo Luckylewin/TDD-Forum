@@ -9,6 +9,7 @@
 namespace Tests\Feature;
 
 
+use App\Models\Reply;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -59,5 +60,22 @@ class FavoritesTest extends TestCase
         }
 
         $this->assertCount(1, $reply->favorites);
+    }
+
+    /**
+     * 用户可以取消回复
+     * @test
+     */
+    public function an_authenticated_user_can_cancel_favorite_a_reply()
+    {
+        $this->signIn();
+
+        $reply = create(Reply::class);
+
+        $reply->favorite();
+
+        $this->delete('/replies/' . $reply->id . '/favorites');
+
+        $this->assertCount(0, $reply->fresh()->favorites);
     }
 }

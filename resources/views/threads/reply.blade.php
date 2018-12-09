@@ -9,19 +9,9 @@
                 </h5>
 
                 <div>
-                    @if($reply->isFavorited() === false)
-                        <form action="/replies/{{ $reply->id }}/favorites" method="post">
-                            {{ csrf_field() }}
-                            <button type="submit" class="btn btn-default" title="favorite">
-                                {{ $reply->favorites_count }}    ❤
-                            </button>
-                        </form>
-                    @else
-                        <button type="submit" class="btn btn-default" title="favorite">
-                            {{ $reply->favorites_count }}  <font color="red">❤</font>
-                        </button>
-                    @endif
+                    <favorite :reply="{{ $reply }}"></favorite>
                 </div>
+
             </div>
         </div>
 

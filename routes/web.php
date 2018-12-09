@@ -43,4 +43,5 @@ Route::patch('/replies/{reply}', 'RepliesController@update');
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
 // 点赞
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
-
+// 取消点赞
+Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
