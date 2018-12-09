@@ -88,4 +88,38 @@ class ParticipateInForumTest extends TestCase
         $this->assertDatabaseMissing('replies',['id' => $reply->id]);
     }
 
+    /**
+     * 没有权限的用户不能编辑回复
+     * @test
+     */
+    public function unauthorized_users_cannot_update_replies()
+    {
+        $this->withExceptionHandling();
+
+        $reply = create(Reply::class);
+
+        $this->patch("/replies/{$reply->id}")
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this->patch("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
+
+    /**
+     * 有权限的用户可以编辑回复
+     * @test
+     */
+    public function authorized_users_can_update_replies()
+    {
+        $this->signIn();
+
+        $reply = create(Reply::class, ['user_id' => auth()->id()]);
+
+        $updateContent = "it have been change,foo";
+        $this->patch("/replies/{$reply->id}", ['body' => $updateContent]);
+
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updateContent]);
+    }
 }

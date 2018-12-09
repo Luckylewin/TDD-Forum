@@ -37,6 +37,8 @@ Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
 //Route::resource('threads', 'ThreadsController');
 // 发表回复
 Route::post('/threads/{thread}/replies', 'RepliesController@store');
+// 更新回复
+Route::patch('/replies/{reply}', 'RepliesController@update');
 // 删除回复
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
 // 点赞

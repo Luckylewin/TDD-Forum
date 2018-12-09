@@ -36,4 +36,13 @@ class RepliesController extends Controller
 
         return back()->with('flash', '评论已删除');
     }
+
+    public function update(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->update(request(['body']));
+
+
+    }
 }
