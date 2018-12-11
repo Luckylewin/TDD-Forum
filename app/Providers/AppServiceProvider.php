@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-       Carbon::setLocale('zh');
+       // Carbon::setLocale('zh');
        view()->composer('*', function ($view) {
            $channels = \Cache::rememberForever('channels', function(){
                 return Channel::query()->limit(10)->orderBy('created_at', 'desc')->get();

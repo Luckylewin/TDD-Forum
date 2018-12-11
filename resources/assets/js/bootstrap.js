@@ -45,6 +45,12 @@ window.flash = function (message) {
     window.events.$emit('flash',message);
 };
 
+Vue.prototype.authorize = function (handler) {
+    let user = window.App.user;
+
+    return user ? handler(user) : false;
+};
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

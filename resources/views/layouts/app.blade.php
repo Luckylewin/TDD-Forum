@@ -17,6 +17,13 @@
         [v-cloak] { display: none; }
         .no-line { outline: 0!important;}
     </style>
+    <script>
+        window.App = {!! json_encode([
+            'csrfToken' => csrf_token(),
+            'signIn' => Auth::check(),
+            'user' => Auth::user()
+        ]) !!}
+    </script>
 </head>
 <body>
     <div id="app">
@@ -28,6 +35,8 @@
     </div>
 
     <!-- Scripts -->
+
     <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>
