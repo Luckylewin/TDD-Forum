@@ -11,7 +11,7 @@
                           v-model="body"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-default" @click="addReply">
+            <button type="submit" class="btn btn-default" :disabled="isDisabled" @click="addReply">
                 提交
             </button>
         </div>
@@ -26,11 +26,10 @@
     export default {
         name: "new-reply",
 
-        props: ['endpoint'],
-
         data() {
             return {
                 body:'',
+                isDisabled: false,
             }
         },
 
@@ -41,14 +40,22 @@
         },
 
         methods: {
+
+            endpoint() {
+                return location.pathname + '/replies';
+            },
+
             addReply() {
-                axios.post(this.endpoint, { body: this.body})
+                this.isDisabled = true;
+                axios.post(this.endpoint(), { body: this.body})
                      .then(({data}) => {
                            this.body = '';
 
                            flash('回复已发送');
 
-                           this.$emit('created',data)
+                           this.$emit('created',data);
+
+                           this.isDisabled = false;
                      });
             }
         }

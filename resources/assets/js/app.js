@@ -14,8 +14,9 @@ require('./bootstrap');
  */
 
 Vue.component('flash', require('./components/Flash'));
-Vue.component('thread-view', require('./pages/Thread'));
+Vue.component('paginator', require('./components/Paginator'));
 
+Vue.component('thread-view', require('./pages/Thread'));
 
 const app = new Vue({
     el: '#app'

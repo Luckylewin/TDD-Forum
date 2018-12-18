@@ -68,10 +68,7 @@ class ThreadsController extends Controller
 
     public function show($channelId,Thread $thread)
     {
-        return view('threads.show', [
-            'thread' => $thread,
-            'replies' => $thread->replies()->get()
-        ]);
+        return view('threads.show', compact('thread'));
     }
 
     protected function getThreads(Channel $channel, ThreadsFilters $filters)

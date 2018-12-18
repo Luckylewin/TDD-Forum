@@ -30,10 +30,7 @@
                     </div>
 
                     {{--回复区域--}}
-                    <replies :data="{{ $replies }}"
-                             @removed="repliesCount--"
-                             @added="repliesCount++"
-                    ></replies>
+                    <replies @removed="repliesCount--" @added="repliesCount++"></replies>
 
                 </div>
                 <div class="col-md-4">

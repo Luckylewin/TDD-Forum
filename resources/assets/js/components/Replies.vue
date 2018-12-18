@@ -1,16 +1,19 @@
 <template>
     <div>
         <div v-for="(reply, index) in items">
-            <reply :data="reply" @deleted="remove(index)"></reply>
+            <reply :data="reply" @deleted="remove(index)" :key="reply.id"></reply>
         </div>
 
-        <new-reply :endpoint="endpoint" @created="add"></new-reply>
+        <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+
+        <new-reply @created="add"></new-reply>
     </div>
 </template>
 
 <script>
     import Reply from './Reply.vue';
     import NewReply from './NewReply.vue';
+    import Collection from '../mixins/Collection.vue'
 
     export default {
         name: 'Replies',
@@ -19,27 +22,37 @@
 
         components: { Reply,NewReply},
 
+        mixins: [Collection],
+
         data() {
             return {
-                items:this.data,
-                endpoint: location.pathname+'/replies'
+                dataSet: false
             }
         },
 
+        created() {
+            this.fetch()
+        },
+
         methods: {
-            remove(index) {
-                this.items.splice(index, 1);
+            url(page) {
+               if (!page) {
+                   let query = location.search.match(/page=(\d+)/);
 
-                this.$emit('removed');
+                   page = query ? query[1] : 1;
+               }
 
-                flash('已删除该回复');
+                return `${location.pathname}/replies?page=${page}`
             },
 
-            add(reply) {
+            fetch(page) {
+                axios.get(this.url(page))
+                     .then(this.refresh);
+            },
 
-                this.$emit('added');
-
-                this.items.push(reply)
+            refresh({data}) {
+                this.dataSet = data;
+                this.items = data.data;
             }
         }
     }
