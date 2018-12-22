@@ -28,8 +28,10 @@ Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('/threads', 'ThreadsController@store');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 
-// 收藏帖子
+// 订阅帖子
 Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->middleware('auth');
+// 取消订阅
+Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->middleware('auth');
 
 Route::get('/threads/{channel}/{thread}/{replies}', 'RepliesController@index');
 Route::post('/threads/{channel}/{thread}/{replies}', 'RepliesController@store');

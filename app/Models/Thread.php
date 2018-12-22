@@ -14,6 +14,12 @@ class Thread extends Model
      protected $guarded = [];
      protected $with = ['creator','channel'];
 
+     // 是否订阅访问器
+     public function getIsSubscribedToAttribute()
+     {
+         return $this->subscriptions()->where('user_id', auth()->id())->exists();
+     }
+
      public static function boot()
      {
          parent::boot();
@@ -79,7 +85,7 @@ class Thread extends Model
      public function unsubscribe($userId = null)
      {
          $this->subscriptions()
-             ->where('user_id', $userId)
+             ->where('user_id','=', $userId ?: auth()->id())
              ->delete();
      }
 

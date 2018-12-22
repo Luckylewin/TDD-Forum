@@ -17,6 +17,7 @@ class CreateThreadSubscriptionsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('thread_id');
+            $table->unique(['user_id','thread_id']);
             $table->timestamps();
 
             $table->foreign('thread_id')

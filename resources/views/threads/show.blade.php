@@ -40,6 +40,10 @@
                                 <a href="#">{{ $thread->creator->name }}</a> 发布于 {{ $thread->created_at->diffForHumans() }},
                                 当前共有 <span v-text="repliesCount"></span> 个回复
                             </p>
+
+                            <p>
+                                <Subscribe-button :active="{{ json_encode($thread->isSubscribeTo) }}"></Subscribe-button>
+                            </p>
                         </div>
                     </div>
                 </div>
