@@ -52,6 +52,7 @@ class ThreadTest extends TestCase
     }
 
     /**
+     * 一个话题属于一个频道
      * @test
      */
     public function a_thread_belongs_to_a_channel()
@@ -62,6 +63,7 @@ class ThreadTest extends TestCase
     }
 
     /**
+     * 路径
      * @test
      */
     public function a_thread_can_make_a_string_path()
@@ -71,4 +73,41 @@ class ThreadTest extends TestCase
         $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
     }
 
+    /**
+     * 话题可以被订阅
+     * @test
+     */
+    public function a_thread_can_be_subscribed_to()
+    {
+        // 测试逻辑 ：给定一个话题，一个认证的用户,当用户订阅此话题，用户能够看到所有该话题的回复
+        $thread = create(Thread::class);
+
+        $this->signIn();
+
+        $thread->subscribe();
+
+        $this->assertCount(
+            1,
+                     $thread->subscriptions()->where('user_id',auth()->id())->get()
+            );
+    }
+
+    /**
+     * 用户取消订阅
+     * @test
+     */
+    public function a_thread_can_be_unsubscribed()
+    {
+        // 测试逻辑
+        // 给定一个话题
+        $thread = create(Thread::class);
+
+        // 用户ID=1的人去订阅
+        $thread->subscribe($userId = 1);
+
+        // 然后取消了订阅
+        $thread->unsubscribe($userId);
+
+        $this->assertCount(0, $thread->subscriptions);
+    }
 }

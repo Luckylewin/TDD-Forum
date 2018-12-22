@@ -42,11 +42,13 @@ class Thread extends Model
                      ->orderBy('created_at', 'desc');
      }
 
+     // 创建人
      public function creator()
      {
          return $this->belongsTo(User::class, 'user_id');
      }
 
+     // 频道
      public function channel()
      {
          return $this->belongsTo(Channel::class);
@@ -57,9 +59,34 @@ class Thread extends Model
          return $filters->apply($query);
      }
 
+     // 新增回复
      public function addReply($reply)
      {
          return $this->replies()->create($reply);
+     }
+
+     // 订阅话题
+     public function subscribe($userId = null)
+     {
+        $this->subscriptions()->create([
+            'user_id' => $userId ?: auth()->id()
+        ]);
+
+        return $this;
+     }
+
+     // 取消订阅
+     public function unsubscribe($userId = null)
+     {
+         $this->subscriptions()
+             ->where('user_id', $userId)
+             ->delete();
+     }
+
+
+     public function subscriptions()
+     {
+         return $this->hasMany(ThreadSubscription::class);
      }
 
 }
