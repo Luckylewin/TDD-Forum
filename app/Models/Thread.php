@@ -18,9 +18,12 @@ class Thread extends Model
      {
          parent::boot();
          // 全局作用域
-         static::addGlobalScope('replyCount', function ($builder) {
+
+         // replies_count 加到 threads 表
+         /*static::addGlobalScope('replyCount', function ($builder) {
              $builder->withCount('replies');
-         });
+         });*/
+
          // 删除对应的回复
          static::deleting(function ($thread) {
              // 逐条删除 触发 Reply 删除事件

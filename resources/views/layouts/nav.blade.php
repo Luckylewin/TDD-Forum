@@ -28,7 +28,8 @@
                         @if (auth()->check())
                         <li><a href="/threads?by={{ auth()->user()->name }}">My Threads</a> </li>
                         @endif
-                        <li><a href="/threads?popularity=1">Popular Threads</a> </li>
+                        <li><a href="/threads?popularity=1">最热的帖子</a></li>
+                        <li><a href="/threads?unanswered=1">零回复</a></li>
                     </ul>
                 </li>
                 <li><a href="{{ url('/threads/create') }}">New Threads</a></li>

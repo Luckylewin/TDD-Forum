@@ -46,19 +46,6 @@ class ReadThreadsTest extends TestCase
     }
 
     /**
-     * @test 用户可以回复帖子
-     */
-    public function a_user_can_read_replies_that_are_associated_with_a_thread()
-    {
-        // 当有 thread 的时候 且该 thread 有 reply 的时候
-        $reply = factory('App\Models\Reply')->create([
-                'thread_id' => $this->thread->id
-        ]);
-        // 用户一定会看到 reply
-        $this->get($this->thread->path())->assertSee($reply->body);
-    }
-
-    /**
      * @test 用户可以根据频道来过滤帖子
      */
     public function a_user_can_filter_threads_according_to_a_channel()
@@ -112,11 +99,24 @@ class ReadThreadsTest extends TestCase
     public function a_user_can_request_all_replies_for_a_given_thread()
     {
         $thread = create(Thread::class);
-        create(Reply::class, ['thread_id' => $thread->id], 2);
+        create(Reply::class, ['thread_id' => $thread->id], 40);
 
         $response = $this->json('get', $thread->path() . '/replies')->json();
 
-        $this->assertCount(1, $response['data']);
-        $this->assertEquals(2, $response['total']);
+        $this->assertCount(20, $response['data']);
+        $this->assertEquals(40, $response['total']);
+    }
+
+    /**
+     * @test
+     */
+    public function a_user_filter_threads_by_those_that_are_unanswered()
+    {
+        $thread = create(Thread::class);
+        create(Reply::class,['thread_id' => $thread->id]);
+
+        $response = $this->getJson('threads?unanswered=1')->json();
+
+        $this->assertCount(1, $response);
     }
 }
