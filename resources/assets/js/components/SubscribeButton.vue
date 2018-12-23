@@ -1,5 +1,5 @@
 <template>
-    <button :class="classes" @click="subscribe">订阅</button>
+    <button :class="classes" @click="subscribe" v-text="subscribe_text">订阅</button>
 </template>
 
 <script>
@@ -8,9 +8,21 @@
 
         props: ['active'],
 
+        data() {
+            return {current:false}
+        },
+
+        created() {
+            this.current = this.active;
+        },
+
         computed: {
             classes() {
-                return ['btn', this.active ? 'btn-primary' : 'btn-default']
+                return ['btn', this.current ? 'btn-primary' : 'btn-default']
+            },
+
+            subscribe_text() {
+                return this.current ? '已订阅' : '订阅'
             }
         },
 
@@ -18,7 +30,7 @@
             subscribe() {
                 let url = location.pathname + '/subscriptions';
 
-                if (this.active) {
+                if (!this.current) {
                     axios.post(url);
                     flash('已订阅')
                 } else {
@@ -26,8 +38,7 @@
                     flash('取消订阅')
                 }
 
-
-                this.active = ! this.active;
+                this.current = ! this.current;
             }
         }
     }

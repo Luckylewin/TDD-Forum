@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Models\Reply;
+use App\Models\Thread;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,8 +13,14 @@ class ThreadWasUpdated extends Notification
 {
     use Queueable;
 
+    /**
+     * @var Thread
+     */
     protected $thread;
 
+    /**
+     * @var Reply
+     */
     protected $reply;
 
     /**
@@ -61,7 +69,8 @@ class ThreadWasUpdated extends Notification
     public function toArray($notifiable)
     {
         return [
-           'message' => 'Temporary data'
+           'message' => $this->reply->owner->name . '回复了话题:' . $this->thread->title,
+           'link'  => $this->reply->path()
         ];
     }
 }

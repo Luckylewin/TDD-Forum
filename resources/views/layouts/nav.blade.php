@@ -24,9 +24,9 @@
                        aria-expanded="false">Browse <span class="caret"></span> </a>
 
                     <ul class="dropdown-menu">
-                        <li><a href="/threads">ALL Threads</a> </li>
+                        <li><a href="/threads">所有话题</a> </li>
                         @if (auth()->check())
-                        <li><a href="/threads?by={{ auth()->user()->name }}">My Threads</a> </li>
+                        <li><a href="/threads?by={{ auth()->user()->name }}">我的话题</a> </li>
                         @endif
                         <li><a href="/threads?popularity=1">最热的帖子</a></li>
                         <li><a href="/threads?unanswered=1">零回复</a></li>
@@ -55,6 +55,7 @@
                     <li><a href="{{ route('login') }}">Login</a></li>
                     <li><a href="{{ route('register') }}">Register</a></li>
                 @else
+                    <user-notification></user-notification>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             {{ Auth::user()->name }} <span class="caret"></span>

@@ -18,11 +18,12 @@ class UserNotificationsController extends Controller
 
     public function index()
     {
-        return auth()->user()->notifications;
+        return auth()->user()->unreadNotifications;
     }
 
     public function destroy(User $user, $notificationId)
     {
-        auth()->user()->notifications()->findOrFail($notificationId)->markAsRead();
+        $notification = auth()->user()->notifications()->where(['id' => $notificationId])->first();
+        $notification->markAsRead();
     }
 }
