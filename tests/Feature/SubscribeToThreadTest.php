@@ -10,6 +10,7 @@ namespace Tests\Feature;
 
 
 use App\Models\Thread;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -26,17 +27,19 @@ class SubscribeToThreadTest extends TestCase
 
         $this->signIn();
 
+        $this->assertCount(0, auth()->user()->notifications);
+
         // 订阅
         $this->post($thread->path() . '/subscriptions');
 
         // 该文章有人回复
         $thread->addReply([
-            'user_id' => auth()->id(),
+            'user_id' => create(User::class)->id,
             'body' => 'reply for example'
         ]);
 
         // 订阅该话题的用户可以获取到通知
-        $this->assertCount(1, auth()->user()->notifications);
+        $this->assertCount(1, auth()->user()->fresh()->notifications);
     }
 
     /**
@@ -47,6 +50,8 @@ class SubscribeToThreadTest extends TestCase
         $this->signIn();
 
         $thread = create(Thread::class);
+
+        $thread->unsubscribe();
 
         $this->delete($thread->path() . '/subscriptions');
 
