@@ -57,3 +57,15 @@ $factory->define(\App\Models\Reply::class, function (\Faker\Generator $faker) {
         'body' => $faker->paragraph
     ];
 });
+
+$factory->define(\Illuminate\Notifications\DatabaseNotification::class, function ($faker) {
+    return [
+        'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+        'type' => \App\Notifications\ThreadWasUpdated::class,
+        'notifiable_id' => function () {
+            return auth()->id() ?: factory('App\User')->create()->id;
+        },
+        'notifiable_type' => \App\User::class,
+        'data' => ['foo' => 'test']
+    ];
+});
