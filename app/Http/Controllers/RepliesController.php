@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reply;
-use App\Models\Spam;
+use App\Inspections\Spam;
 use App\Models\Thread;
 
 class RepliesController extends Controller
