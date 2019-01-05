@@ -65,3 +65,7 @@ Vue.prototype.authorize = function (handler) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+window.flash = function(message, level = 'success') {
+    window.events.$emit('flash', {message, level});
+};

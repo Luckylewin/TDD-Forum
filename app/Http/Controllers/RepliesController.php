@@ -23,22 +23,22 @@ class RepliesController extends Controller
         return $thread->replies()->paginate(20);
     }
 
-    public function store($channelId, Thread $thread,Spam $spam)
+    public function store($channelId, Thread $thread)
     {
-        $this->validate(request(), ['body' => 'required']);
+        try {
+            $this->validateReply();
 
-        $spam->detect(request('body'));
-
-        $reply = $thread->addReply([
-            'body'    => request('body'),
-            'user_id' => auth()->id()
-        ]);
-
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
+            $reply = $thread->addReply([
+                'body'    => request('body'),
+                'user_id' => auth()->id()
+            ]);
+        } catch (\Exception $e) {
+            return response(
+                'Sorry,your reply could not be saved at this time', 422
+            );
         }
 
-        return back()->with('flash','已发表回复');
+        return $reply->load('owner');
     }
 
     public function destroy(Reply $reply)
@@ -58,8 +58,15 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
+        $this->validateReply();
+
         $reply->update(request(['body']));
+    }
 
+    protected function validateReply()
+    {
+        $this->validate(request(), ['body' => 'required']);
 
+        resolve(Spam::class)->detect(request('body'));
     }
 }
