@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\ThreadHasNewReply;
 use App\Filters\Filters;
-use App\Notifications\ThreadWasUpdated;
 use App\Traits\RecordsActivity;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -71,16 +71,18 @@ class Thread extends Model
      {
          $reply = $this->replies()->create($reply);
 
-         // 向订阅者发送通知
-
-         $this->subscriptions
-             ->filter(function ($sub) use ($reply){
-                return $sub->user_id != $reply->user_id;
-             })
-             ->each
-             ->notify($reply);
+         $this->notifySubscribers($reply);
 
          return $reply;
+     }
+
+     // 向订阅者发送通知
+     protected function notifySubscribers($reply)
+     {
+         $this->subscriptions
+             ->where('user_id','!=',$reply->user_id)
+             ->each
+             ->notify($reply);
      }
 
      // 订阅话题
