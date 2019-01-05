@@ -117,5 +117,6 @@ return [
     */
 
     'attributes' => [],
+    'spamfree' => 'The :attribute contains spam.'
 
 ];

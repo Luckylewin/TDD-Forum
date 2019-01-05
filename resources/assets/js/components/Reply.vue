@@ -69,7 +69,10 @@
                 let url = '/replies/' + this.data.id;
                 axios.patch(url, {
                     body:this.body
-                });
+                })
+                    .catch(error => {
+                        flash(':( ' + error.response.data, 'danger');
+                    });
 
                 this.editing = false;
 

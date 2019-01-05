@@ -136,9 +136,8 @@ class ParticipateInForumTest extends TestCase
         $thread = create(Thread::class);
         $reply = make(Reply::class, ['body' => 'something forbidden']);
 
-        $this->expectException(\Exception::class);
-
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
     }
 
 }

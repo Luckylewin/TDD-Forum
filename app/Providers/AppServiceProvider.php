@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
            });
            $view->with('channels', $channels);
        });
+
+       // 扩展自定义的验证方法
+        \Validator::extend('spamfree','App\Rules\SpamFree@passes');
     }
 
     /**
