@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Reply;
+use App\Models\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -124,4 +125,20 @@ class ParticipateInForumTest extends TestCase
 
         $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => $updateContent]);
     }
+
+    /**
+     * @test 包含垃圾话的留言不能被创建
+     */
+    public function replies_contain_spam_may_not_be_created()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+        $reply = make(Reply::class, ['body' => 'something forbidden']);
+
+        $this->expectException(\Exception::class);
+
+        $this->post($thread->path() . '/replies', $reply->toArray());
+    }
+
 }
