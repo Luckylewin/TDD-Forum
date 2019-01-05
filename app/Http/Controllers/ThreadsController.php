@@ -66,8 +66,12 @@ class ThreadsController extends Controller
                 ->with('flash','话题已删除');
     }
 
-    public function show($channelId,Thread $thread)
+    public function show($channel,Thread $thread)
     {
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
+
         return view('threads.show', compact('thread'));
     }
 

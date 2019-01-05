@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Thread;
 use App\Notifications\ThreadWasUpdated;
+use App\User;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -146,5 +147,30 @@ class ThreadTest extends TestCase
         $thread->subscribe();
 
         $this->assertTrue($thread->isSubscribedTo);
+    }
+
+    /**
+     * @test 如果登录用户已经阅读过所有,则话题可以检测到此状态
+     */
+    public function a_thread_can_check_if_the_authenticated_user_has_read_all_replies()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+
+        tap(auth()->user(), function ($user) use ($thread) {
+            // 对标题进行加粗显示
+            $this->assertTrue($thread->hasUpdatesFor($user));
+
+            /**
+             * 浏览话题
+             * @var $user User
+             */
+            $user->read($thread);
+
+            // 取消加粗
+            $this->assertFalse($thread->hasUpdatesFor($user));
+        });
     }
 }

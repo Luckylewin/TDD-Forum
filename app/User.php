@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\Activity;
 use App\Models\Thread;
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -46,5 +47,20 @@ class User extends Authenticatable
     public function activity()
     {
         return $this->hasMany(Activity::class)->latest();
+    }
+
+    // 阅读后进行缓存
+    public function read($thread)
+    {
+        cache()->forever(
+            $this->visitedThreadCacheKey($thread),
+            Carbon::now()
+        );
+    }
+
+    // 阅读话题的缓存键
+    public function visitedThreadCacheKey($thread)
+    {
+        return $key = sprintf("user.%s.visits.%s", $this->id, $thread->id);
     }
 }
