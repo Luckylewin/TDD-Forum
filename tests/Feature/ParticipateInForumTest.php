@@ -129,14 +129,16 @@ class ParticipateInForumTest extends TestCase
     /**
      * @test 包含垃圾话的留言不能被创建
      */
-    public function replies_contain_spam_may_not_be_created()
+    public function replies_that_contain_spam_may_not_be_created()
     {
+        $this->withExceptionHandling();
+
         $this->signIn();
 
         $thread = create(Thread::class);
         $reply = make(Reply::class, ['body' => 'something forbidden']);
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
+        $this->postJson($thread->path() . '/replies', $reply->toArray())
             ->assertStatus(422);
     }
 
@@ -145,6 +147,8 @@ class ParticipateInForumTest extends TestCase
      */
     public function users_may_only_reply_a_maximum_of_once_per_minute()
     {
+        $this->withExceptionHandling();
+
         $this->signIn();
 
         $thread = create(Thread::class);
@@ -157,7 +161,7 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(200);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(429);
     }
 
 }
