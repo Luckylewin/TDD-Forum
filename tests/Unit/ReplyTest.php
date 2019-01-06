@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Models\Reply;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -18,5 +20,19 @@ class ReplyTest extends TestCase
     {
         $reply = factory('App\Models\Reply')->create();
         $this->assertInstanceOf('App\User', $reply->owner);
+    }
+
+    /**
+     * @test 测试是否为刚刚发布的回复
+     */
+    public function it_knows_if_it_was_just_published()
+    {
+        $reply = create(Reply::class);
+
+        $this->assertTrue($reply->wasJustPublished());
+
+        $reply->created_at = Carbon::now()->subMonth();
+
+        $this->assertFalse($reply->wasJustPublished());
     }
 }

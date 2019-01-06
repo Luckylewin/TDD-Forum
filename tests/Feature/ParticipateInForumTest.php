@@ -140,4 +140,24 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(422);
     }
 
+    /**
+     * @test 用户评论速率受限制
+     */
+    public function users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $reply = make(Reply::class, [
+            'body' => 'My simple reply'
+        ]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(200);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Activity;
+use App\Models\Reply;
 use App\Models\Thread;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
@@ -62,5 +63,11 @@ class User extends Authenticatable
     public function visitedThreadCacheKey($thread)
     {
         return $key = sprintf("user.%s.visits.%s", $this->id, $thread->id);
+    }
+
+    // 获取用户最新的回复
+    public function lastReply()
+    {
+        return $this->hasOne(Reply::class)->latest();
     }
 }
