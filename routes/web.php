@@ -42,6 +42,9 @@ Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index'
 Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
 
 
+// @某人补齐
+Route::get('api/users','Api\UsersController@index');
+
 // 发表回复
 Route::post('/threads/{thread}/replies', 'RepliesController@store');
 // 更新回复

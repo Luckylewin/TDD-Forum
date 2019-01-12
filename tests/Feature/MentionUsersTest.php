@@ -39,4 +39,17 @@ class MentionUsersTest extends TestCase
 
         $this->assertCount(1, $jane->notifications);
     }
+
+    /**
+     * @test 可以根据给定字符的返回用户名列表
+     */
+    public function it_can_fetch_all_users_starting_with_the_given_characters()
+    {
+        create(User::class,['name' => 'jack']);
+        create(User::class,['name' => 'jack2']);
+        create(User::class,['name' => 'jake']);
+
+        $results = $this->json('GET','api/users',['name' => 'jack']);
+        $this->assertCount(2,$results->json());
+    }
 }

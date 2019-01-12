@@ -24,6 +24,7 @@
             'user' => Auth::user()
         ]) !!}
     </script>
+    @yield('header')
 </head>
 <body>
     <div id="app">
