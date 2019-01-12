@@ -44566,7 +44566,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
 
 // exports
 
@@ -44665,6 +44665,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         destroy: function destroy() {
             axios.delete('/replies/' + this.data.id);
             this.$emit('deleted', this.data.id);
+        },
+        editReply: function editReply() {
+            this.old_body_data = this.body;
+            this.editing = true;
+        },
+        cancelReply: function cancelReply() {
+            this.body = this.old_body_data;
+            this.old_body_data = '';
+            this.editing = false;
         }
     }
 });
@@ -44895,7 +44904,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { title: "edit" },
+                  attrs: { title: "edit", required: "" },
                   domProps: { value: _vm.body },
                   on: {
                     input: function($event) {
@@ -44922,11 +44931,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-link btn-xs",
-                    on: {
-                      click: function($event) {
-                        _vm.editing = false
-                      }
-                    }
+                    on: { click: _vm.cancelReply }
                   },
                   [_vm._v("取消")]
                 )
@@ -44939,14 +44944,7 @@ var render = function() {
         ? _c("div", { staticClass: "panel-footer level" }, [
             _c(
               "button",
-              {
-                staticClass: "btn btn-xs mr-1",
-                on: {
-                  click: function($event) {
-                    _vm.editing = true
-                  }
-                }
-              },
+              { staticClass: "btn btn-xs mr-1", on: { click: _vm.EditReply } },
               [_vm._v("编辑")]
             ),
             _vm._v(" "),

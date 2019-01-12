@@ -17,11 +17,11 @@
         <div class="panel-body">
             <div v-if="editing">
                 <div class="form-group">
-                    <textarea title="edit" class="form-control" v-model="body"></textarea>
+                    <textarea title="edit" class="form-control" v-model="body" required></textarea>
                 </div>
                 <div class="text-right">
                     <button class="btn btn-primary btn-xs" @click="update">提交</button>
-                    <button class="btn btn-link btn-xs" @click="editing = false">取消</button>
+                    <button class="btn btn-link btn-xs" @click="cancelReply">取消</button>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
         </div>
 
         <div v-if="canUpdate" class="panel-footer level">
-            <button class="btn btn-xs mr-1" @click="editing = true">编辑</button>
+            <button class="btn btn-xs mr-1" @click="EditReply">编辑</button>
             <button class="btn btn-danger btn-xs mr-1" @click="destroy">删除</button>
         </div>
 
@@ -82,6 +82,17 @@
             destroy() {
                 axios.delete('/replies/' + this.data.id);
                 this.$emit('deleted', this.data.id);
+            },
+
+            editReply() {
+                this.old_body_data = this.body;
+                this.editing = true;
+            },
+
+            cancelReply() {
+                this.body = this.old_body_data;
+                this.old_body_data = '';
+                this.editing = false;
             }
         }
     }
