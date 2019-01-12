@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Filters\ThreadsFilters;
-use App\Inspections\Spam;
 use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Http\Request;
@@ -84,7 +83,7 @@ class ThreadsController extends Controller
             $threads->where('channel_id', $channel->id);
         }
 
-        $threads = $threads->get();
+        $threads = $threads->paginate(20);
 
         return $threads;
     }

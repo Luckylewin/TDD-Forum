@@ -90,7 +90,7 @@ class ReadThreadsTest extends TestCase
         $threadWithNoReplies = $this->thread;
 
         $response = $this->getJson('/threads?popularity=1')->json();
-        $this->assertEquals([3,2,0], array_column($response, 'replies_count'));
+        $this->assertEquals([3,2,0], array_column($response['data'], 'replies_count'));
     }
 
     /**
@@ -108,7 +108,7 @@ class ReadThreadsTest extends TestCase
     }
 
     /**
-     * @test
+     * @test 零回复筛选
      */
     public function a_user_filter_threads_by_those_that_are_unanswered()
     {
@@ -117,6 +117,6 @@ class ReadThreadsTest extends TestCase
 
         $response = $this->getJson('threads?unanswered=1')->json();
 
-        $this->assertCount(1, $response);
+        $this->assertCount(1, $response['data']);
     }
 }
