@@ -60,8 +60,17 @@ class Reply extends Model
     // 通过名字提醒用户
     public function mentionedUsers()
     {
-        preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
+        preg_match_all('/@([\w\-]+)/', $this->body, $matches);
 
         return $matches[1];
+    }
+
+    /**
+     * body 字段修改器
+     * @param $body
+     */
+    public function setBodyAttribute($body)
+    {
+        $this->attributes['body'] = preg_replace('/@([\w\-]+)/','<a href="/profiles/$1">$0</a>', $body);
     }
 }

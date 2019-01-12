@@ -47,4 +47,19 @@ class ReplyTest extends TestCase
 
         $this->assertEquals(['JaneDoe','JohnDoe'], $reply->mentionedUsers());
     }
+
+    /**
+     * @test 被@的用户 使用 a 标签包裹
+     */
+    public function it_wraps_mentioned_usernames_in_the_body_within_archor_tags()
+    {
+        $reply = create(Reply::class,[
+            'body' => 'Hello @Jane-Doe.'
+        ]);
+
+        $this->assertEquals(
+            'Hello <a href="/profiles/Jane-Doe">@Jane-Doe</a>.',
+            $reply->body
+            );
+    }
 }
