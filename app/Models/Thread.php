@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\ThreadHasNewReply;
+use App\Events\ThreadReceivedNewReply;
 use App\Filters\Filters;
 use App\Traits\RecordsActivity;
 use App\User;
@@ -24,12 +24,6 @@ class Thread extends Model
      public static function boot()
      {
          parent::boot();
-         // 全局作用域
-
-         // replies_count 加到 threads 表
-         /*static::addGlobalScope('replyCount', function ($builder) {
-             $builder->withCount('replies');
-         });*/
 
          // 删除对应的回复
          static::deleting(function ($thread) {
@@ -38,11 +32,13 @@ class Thread extends Model
          });
      }
 
+     // 话题url
      public function path()
      {
          return "/threads/{$this->channel->slug}/{$this->id}";
      }
 
+     // 回复关联关系
      public function replies()
      {
          return $this->hasMany(Reply::class)
@@ -61,6 +57,7 @@ class Thread extends Model
          return $this->belongsTo(Channel::class);
      }
 
+     // 过滤
      public function ScopeFilter($query, Filters $filters)
      {
          return $filters->apply($query);
@@ -71,18 +68,10 @@ class Thread extends Model
      {
          $reply = $this->replies()->create($reply);
 
-         $this->notifySubscribers($reply);
+         // 事件触发通知
+         event(new ThreadReceivedNewReply($reply));
 
          return $reply;
-     }
-
-     // 向订阅者发送通知
-     protected function notifySubscribers($reply)
-     {
-         $this->subscriptions
-             ->where('user_id','!=',$reply->user_id)
-             ->each
-             ->notify($reply);
      }
 
      // 订阅话题
@@ -103,7 +92,7 @@ class Thread extends Model
              ->delete();
      }
 
-
+     // 订阅关系
      public function subscriptions()
      {
          return $this->hasMany(ThreadSubscription::class);

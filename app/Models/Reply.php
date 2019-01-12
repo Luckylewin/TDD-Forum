@@ -45,6 +45,7 @@ class Reply extends Model
         return $this->belongsTo(Thread::class);
     }
 
+    // 回复url
     public function path()
     {
         return $this->thread->path() . '#reply-' . $this->id;
@@ -54,5 +55,13 @@ class Reply extends Model
     public function wasJustPublished()
     {
         return $this->created_at->gt(Carbon::now()->subMinute());
+    }
+
+    // 通过名字提醒用户
+    public function mentionedUsers()
+    {
+        preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
+
+        return $matches[1];
     }
 }
