@@ -14,9 +14,13 @@
                         <div class="panel-heading">
 
                             <div class="level">
+                                <img src="/storage/{{ $thread->creator->avatar() }}" alt="{{ $thread->creator->name }}" width="25" height="25" class="mr-1">
+
                                 <span class="flex">
-                                        {{ $thread->title }}
+                                     <a href="{{ route('profile',$thread->creator) }}">{{ $thread->creator->name }}</a> posted:
+                                    {{ $thread->title }}
                                 </span>
+
                                 @can('update', $thread)
                                     <form action="{{ $thread->path() }}" method="POST">
                                         {{ csrf_field() }}
@@ -24,6 +28,7 @@
                                         <button type="submit" class="btn btn-link" >删除</button>
                                     </form>
                                 @endcan
+
                             </div>
 
                         </div>
