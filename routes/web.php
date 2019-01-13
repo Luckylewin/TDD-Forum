@@ -44,6 +44,10 @@ Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotification
 
 // @某人补齐
 Route::get('api/users','Api\UsersController@index');
+// 头像
+Route::post('/api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
+
+
 
 // 发表回复
 Route::post('/threads/{thread}/replies', 'RepliesController@store');
