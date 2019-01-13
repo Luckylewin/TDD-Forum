@@ -16,6 +16,7 @@ require('./bootstrap');
 Vue.component('flash', require('./components/Flash'));
 Vue.component('paginator', require('./components/Paginator'));
 Vue.component('user-notification', require('./components/UserNotifications'));
+Vue.component('avatar-form', require('./components/AvatarForm'));
 
 Vue.component('thread-view', require('./pages/Thread'));
 
