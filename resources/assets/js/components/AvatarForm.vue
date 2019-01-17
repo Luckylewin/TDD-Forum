@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1 v-text="user.name"></h1>
-
         <form v-if="canUpdate" method="post" enctype="multipart/form-data">
             <image-upload class="mr-1" @loaded="onLoad"></image-upload>
         </form>
