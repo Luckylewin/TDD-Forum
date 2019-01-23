@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Components\Trending;
 use App\Models\Thread;
 use Illuminate\Support\Facades\Redis;
 use Tests\TestCase;
@@ -13,11 +14,17 @@ class TrendingThreadsTest extends TestCase
 {
    use DatabaseMigrations;
 
+    /**
+     * @var Trending
+     */
+   public $trending;
+
    protected function setUp()
    {
        parent::setUp();
 
-       Redis::del('trending_threads');
+       $this->trending = (new Trending());
+       $this->trending->reset();
    }
 
     /**
@@ -25,13 +32,13 @@ class TrendingThreadsTest extends TestCase
      */
    public function it_increments_a_thread_score_each_time_it_is_read()
    {
-       $this->assertEmpty(Redis::zrevrange('trending_threads',0,-1));
+       $this->assertEmpty(Redis::zrevrange($this->trending->cacheKey(),0,-1));
 
        $thread = create(Thread::class);
 
        $this->get($thread->path());
 
-       $trending = Redis::zrevrange('trending_threads',0,-1);
+       $trending = Redis::zrevrange($this->trending->cacheKey(),0,-1);
 
        $this->assertCount(1, $trending);
 

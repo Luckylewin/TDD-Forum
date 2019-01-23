@@ -45219,7 +45219,7 @@ var render = function() {
         _c("div", { staticClass: "level" }, [
           _c("h5", { staticClass: "flex" }, [
             _c("a", {
-              attrs: { href: "profile" + _vm.data.owner.name },
+              attrs: { href: "/profiles/" + _vm.data.owner.name },
               domProps: { textContent: _vm._s(_vm.data.owner.name) }
             }),
             _vm._v(

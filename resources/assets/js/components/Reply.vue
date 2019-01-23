@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
-                    <a :href="'profile' + data.owner.name" v-text="data.owner.name"></a>
+                    <a :href="'/profiles/' + data.owner.name" v-text="data.owner.name"></a>
                     回复于 {{ data.created_at }}
                 </h5>
 
