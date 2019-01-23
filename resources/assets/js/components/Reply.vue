@@ -30,7 +30,7 @@
         </div>
 
         <div v-if="canUpdate" class="panel-footer level">
-            <button class="btn btn-xs mr-1" @click="EditReply">编辑</button>
+            <button class="btn btn-xs mr-1" @click="editReply">编辑</button>
             <button class="btn btn-danger btn-xs mr-1" @click="destroy">删除</button>
         </div>
 

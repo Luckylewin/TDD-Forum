@@ -14,7 +14,7 @@ class CreateThreadsTest extends TestCase
     use DatabaseMigrations;
 
     /**
-     * @test
+     * @test 创建话题游客不可见
      */
     public function guests_may_not_see_the_create_thread_page()
     {
@@ -28,7 +28,7 @@ class CreateThreadsTest extends TestCase
     }
 
     /**
-     * @test
+     * @test 认证的用户可以创建话题
      */
     public function an_authenticated_user_can_create_forum_threads()
     {
@@ -44,21 +44,27 @@ class CreateThreadsTest extends TestCase
              ->assertSee($thread->body);
     }
 
-    /** @test */
+    /**
+     * @test 话题-title 必填写
+     */
     public function a_thread_requires_a_title()
     {
         $this->publishThread(['title' => null])
              ->assertSessionHasErrors('title');
     }
 
-    /** @test */
+    /**
+     * @test 话题-body 必填写
+     */
     public function a_thread_requires_a_body()
     {
         $this->publishThread(['body' => null])
              ->assertSessionHasErrors('body');
     }
 
-    /** @test */
+    /**
+     * @test 话题-频道必须选择
+     */
     public function a_thread_requires_a_valid_channel()
     {
         factory('App\Models\Channel', 2)->create();
@@ -119,5 +125,15 @@ class CreateThreadsTest extends TestCase
         $thread = make('App\Models\Thread', $overrides);
 
         return $this->post('/threads', $thread->toArray());
+    }
+
+    /**
+     * @test 登录用户在创建话题前需要先验证邮箱
+     */
+    public function authenticated_users_must_first_confirm_their_email_address_before_creating_threads()
+    {
+        $this->publishThread()
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash','You must first confirm your email address.');
     }
 }

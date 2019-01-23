@@ -68,14 +68,16 @@
                     .catch(error => {
                         flash(':( ' + error.response.data, 'danger');
                      })
-                     .then(({data}) => {
-                           this.body = '';
+                     .then((res) => {
+                           if (typeof res === 'object') {
+                               this.body = '';
 
-                           flash('回复已发送');
+                               flash('回复已发送');
 
-                           this.$emit('created',data);
+                               this.$emit('created',data);
 
-                           this.isDisabled = false;
+                               this.isDisabled = false;
+                           }
                      });
             }
         }
