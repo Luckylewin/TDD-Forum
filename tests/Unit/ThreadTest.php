@@ -174,23 +174,4 @@ class ThreadTest extends TestCase
         });
     }
 
-    /**
-     * @test 每一次被浏览记录下来
-     */
-    public function a_thread_record_each_visit()
-    {
-        $thread = make(Thread::class,['id' => 1]);
-
-        $thread->visits()->reset();
-
-        $this->assertSame(0, $thread->visits()->count());
-
-        $thread->visits()->record();
-
-        $this->assertEquals(1, $thread->visits()->count());
-
-        $thread->visits()->record();
-
-        $this->assertEquals(2, $thread->visits()->count());
-    }
 }
