@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Components\Visits;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\ThreadReceivedNewReply;
 use App\Filters\Filters;
 use App\Traits\RecordsActivity;
-use App\Traits\RecordsVisits;
 use App\User;
 
 class Thread extends Model
 {
-     use RecordsActivity,RecordsVisits;
+     use RecordsActivity;
 
      protected $guarded = [];
      protected $with = ['creator','channel'];
@@ -106,6 +106,11 @@ class Thread extends Model
          $key = $user->visitedThreadCacheKey($this);
 
          return $this->updated_at > cache($key);
+     }
+
+     public function visits()
+     {
+         return new Visits($this);
      }
 }
 
