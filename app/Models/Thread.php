@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use App\Events\ThreadReceivedNewReply;
 use App\Filters\Filters;
 use App\Traits\RecordsActivity;
+use App\Traits\RecordsVisits;
 use App\User;
-use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-     use RecordsActivity;
+     use RecordsActivity,RecordsVisits;
 
      protected $guarded = [];
      protected $with = ['creator','channel'];
@@ -98,7 +99,7 @@ class Thread extends Model
          return $this->hasMany(ThreadSubscription::class);
      }
 
-
+     // 是否被阅读过
      public function hasUpdatesFor(User $user)
      {
         // 获取键名
