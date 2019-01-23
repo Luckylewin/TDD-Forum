@@ -42,7 +42,7 @@ Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index'
 Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
 
 // 邮箱验证
-Route::get('/register/confirm','Api\RegisterConfirmationController@index')->name('register.confirm');
+Route::get('/register/confirm','Auth\RegisterConfirmationController@index')->name('register.confirm');
 
 // @某人补齐
 Route::get('api/users','Api\UsersController@index');

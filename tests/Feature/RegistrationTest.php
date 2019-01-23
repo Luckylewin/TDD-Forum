@@ -51,10 +51,14 @@ class RegistrationTest extends TestCase
 
         $this->assertNotNull($user->confirmation_token);
 
-        $this->get(route('register.confirm',['token' => $user->confirmation_token]));
+        $this->get(route('register.confirm',['token' => $user->confirmation_token]))
+            ->assertRedirect(route('threads'));
 
         // 当新注册用户点击认证链接，用户变成已认证，且跳转到话题列表页面
-        $this->assertTrue($user->fresh()->confirmed);
+        tap($user->fresh(), function($user) {
+            $this->assertTrue($user->confirmed);
+            $this->assertNull($user->confirmation_token);
+        });
     }
 
     /**
