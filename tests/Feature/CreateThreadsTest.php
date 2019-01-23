@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Activity;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\User;
 use Tests\TestCase;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -21,10 +22,10 @@ class CreateThreadsTest extends TestCase
         $this->withExceptionHandling();
 
         $this->get('/threads/create')
-             ->assertRedirect('/login');
+             ->assertRedirect(route('login'));
 
         $this->post('/threads', [])
-             ->assertRedirect('/login');
+             ->assertRedirect(route('login'));
     }
 
     /**
@@ -35,8 +36,8 @@ class CreateThreadsTest extends TestCase
         // 测试逻辑
         $this->signIn();
         // 该用户创建一篇新的帖子
-        $thread = make('App\Models\Thread');
-        $response = $this->post('/threads', $thread->toArray());
+        $thread = make(Thread::class);
+        $response = $this->post(route('threads'), $thread->toArray());
         // 当我们访问帖子时 我们可以看到这篇新的帖子
         // 给定一个已登录的用户
         $this->get($response->headers->get('Location'))
@@ -112,7 +113,7 @@ class CreateThreadsTest extends TestCase
         $thread = create(Thread::class);
         // 游客会跳转到登录
         $this->withExceptionHandling();
-        $this->delete($thread->path())->assertRedirect('/login');
+        $this->delete($thread->path())->assertRedirect(route('login'));
         // 不能删除不是自己的文章
         $this->signIn();
         $this->delete($thread->path())->assertStatus(403);
@@ -130,10 +131,17 @@ class CreateThreadsTest extends TestCase
     /**
      * @test 登录用户在创建话题前需要先验证邮箱
      */
-    public function authenticated_users_must_first_confirm_their_email_address_before_creating_threads()
+    public function new_users_must_first_confirm_their_email_address_before_creating_threads()
     {
-        $this->publishThread()
-            ->assertRedirect('/threads')
+        // 调用 unconfirmed，生成未认证用户
+        $user = factory(User::class)->states('unconfirmed')->create();
+
+        $this->signIn($user);
+
+        $thread = make(Thread::class);
+
+        $this->post(route('threads'),$thread->toArray())
+            ->assertRedirect(route('threads'))
             ->assertSessionHas('flash','You must first confirm your email address.');
     }
 }
