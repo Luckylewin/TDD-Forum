@@ -1,5 +1,5 @@
 <template>
-    <div :id="'reply-'+ data.id" class="panel panel-default">
+    <div :id="'reply-'+ data.id" class="panel" :class="isBest ? 'panel-success' : 'panel-default'">
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
@@ -34,6 +34,7 @@
             <button class="btn btn-danger btn-xs mr-1" @click="destroy">删除</button>
         </div>
 
+        <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-show="! isBest">最佳回复</button>
     </div>
 </template>
 
@@ -50,7 +51,8 @@
             return {
                 editing: false,
                 id: this.data.id,
-                body: this.data.body
+                body: this.data.body,
+                isBest: false
             };
         },
 
@@ -93,6 +95,10 @@
                 this.body = this.old_body_data;
                 this.old_body_data = '';
                 this.editing = false;
+            },
+
+            markBestReply() {
+                this.isBest = true;
             }
         }
     }
