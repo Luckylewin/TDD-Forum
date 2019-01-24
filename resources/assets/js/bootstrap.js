@@ -45,11 +45,26 @@ window.flash = function (message) {
     window.events.$emit('flash',message);
 };
 
-Vue.prototype.authorize = function (handler) {
-    let user = window.App.user;
 
-    return user ? handler(user) : false;
+
+let authorizations = require('./authorizations');
+
+Vue.prototype.authorize = function (...params) {
+
+    if (! window.App.signIn) return false;
+
+    let method = params[0],
+        user = params[1];
+
+    if (typeof method === 'string') {
+        return authorizations[method](user);
+    }
+
+    return method(window.App.user);
 };
+
+// 注册为全局变量
+Vue.prototype.signedIn = window.App.signIn;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

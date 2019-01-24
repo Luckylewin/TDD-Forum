@@ -29,12 +29,17 @@
 
         </div>
 
-        <div v-if="canUpdate" class="panel-footer level">
-            <button class="btn btn-xs mr-1" @click="editReply">编辑</button>
-            <button class="btn btn-danger btn-xs mr-1" @click="destroy">删除</button>
+        <div  class="panel-footer level">
+
+            <div v-if="authorize('updateReply',reply)">
+                <button class="btn btn-xs mr-1" @click="editReply">编辑</button>
+                <button class="btn btn-danger btn-xs mr-1" @click="destroy">删除</button>
+            </div>
+
+            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-show="! isBest">最佳回复</button>
+
         </div>
 
-        <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-show="! isBest">最佳回复</button>
     </div>
 </template>
 
@@ -52,8 +57,15 @@
                 editing: false,
                 id: this.data.id,
                 body: this.data.body,
-                isBest: false
+                isBest: this.data.isBest,
+                reply: this.data
             };
+        },
+
+        created() {
+            window.events.$on('best-reply-selected',id => {
+                this.isBest = (id === this.id)
+            });
         },
 
         computed: {
@@ -99,6 +111,10 @@
 
             markBestReply() {
                 this.isBest = true;
+
+                axios.post('/replies/' + this.data.id + '/best');
+
+                window.events.$emit('best-reply-selected',this.data.id);
             }
         }
     }
