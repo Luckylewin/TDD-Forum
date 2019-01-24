@@ -16,15 +16,22 @@ class Thread extends Model
      protected $guarded = [];
      protected $with = ['creator','channel'];
 
-     // 是否订阅访问器
-     public function getIsSubscribedToAttribute()
+     // 路由key-name
+     public function getRouteKeyName()
      {
-         return $this->subscriptions()->where('user_id', auth()->id())->exists();
+         return 'slug';
      }
 
      public static function boot()
      {
          parent::boot();
+
+         // 生成slug
+         static::created(function ($thread) {
+             $thread->update([
+                 'slug' => $thread->title
+             ]);
+         });
 
          // 删除对应的回复
          static::deleting(function ($thread) {
@@ -33,10 +40,28 @@ class Thread extends Model
          });
      }
 
+    // slug - 修改器
+    public function setSlugAttribute($value)
+    {
+        tap(str_slug($value),function ($slug) {
+            if (static::whereSlug($slug)->where('id','!=',$this->id)->exists()) {
+                $slug = $slug . '-' . $this->id;
+            }
+
+            $this->attributes['slug'] = $slug;
+        });
+    }
+
+    // 是否订阅访问器
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->subscriptions()->where('user_id', auth()->id())->exists();
+    }
+
      // 话题url
      public function path()
      {
-         return "/threads/{$this->channel->slug}/{$this->id}";
+         return "/threads/{$this->channel->slug}/{$this->slug}";
      }
 
      // 回复关联关系

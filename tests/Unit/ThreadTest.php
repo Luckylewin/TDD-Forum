@@ -85,14 +85,14 @@ class ThreadTest extends TestCase
     }
 
     /**
-     * 路径
+     * 一个话题拥有它的专属路径
      * @test
      */
-    public function a_thread_can_make_a_string_path()
+    public function a_thread_has_a_path()
     {
         $thread = $this->thread;
 
-        $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->id}", $thread->path());
+        $this->assertEquals("/threads/{$thread->channel->slug}/{$thread->slug}", $thread->path());
     }
 
     /**

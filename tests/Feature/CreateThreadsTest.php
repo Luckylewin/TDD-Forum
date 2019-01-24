@@ -144,4 +144,34 @@ class CreateThreadsTest extends TestCase
             ->assertRedirect(route('threads'))
             ->assertSessionHas('flash','You must first confirm your email address.');
     }
+
+    /**
+     * @test 话题有唯一的slug
+     */
+    public function a_thread_requires_a_unique_slug()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class,['title' => 'Foo Title','slug'=>'foo-title']);
+
+        $this->assertEquals($thread->fresh()->slug,'foo-title');
+
+        $thread = $this->postJson(route('threads'),$thread->toArray())->json();
+
+        $this->assertEquals("foo-title-{$thread['id']}", $thread['slug']);
+    }
+
+    /**
+     * @test 有数字结尾的标题应该换成正确的slug
+     */
+    public function a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class, ['title' => 'Something 24' ]);
+
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
+
+        $this->assertEquals("something-24-{$thread['id']}", $thread['slug']);
+    }
 }
