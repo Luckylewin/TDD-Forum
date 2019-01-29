@@ -27,6 +27,9 @@ Route::get('/threads/{channel}', 'ThreadsController@index');
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('/threads', 'ThreadsController@store')->middleware('must-be-confirmed');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
+// 锁定话题
+Route::post('locked-threads/{thread}','LockedThreadsController@store')->name('locked-threads')->middleware('admin');
+
 
 // 订阅帖子
 Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->middleware('auth');
