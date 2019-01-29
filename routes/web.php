@@ -49,8 +49,6 @@ Route::get('api/users','Api\UsersController@index');
 // 头像
 Route::post('/api/users/{user}/avatar', 'Api\UserAvatarController@store')->middleware('auth')->name('avatar');
 
-
-
 // 发表回复
 Route::post('/threads/{thread}/replies', 'RepliesController@store');
 // 更新回复
@@ -58,9 +56,8 @@ Route::patch('/replies/{reply}', 'RepliesController@update');
 // 设定最佳回复
 Route::post('/replies/{reply}/best', 'BestRepliesController@store')->name('best-replies.store');
 // 删除回复
-Route::delete('/replies/{reply}', 'RepliesController@destroy');
+Route::delete('/replies/{reply}', 'RepliesController@destroy')->name('replies.destroy');
 // 点赞
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store');
 // 取消点赞
 Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy');
-

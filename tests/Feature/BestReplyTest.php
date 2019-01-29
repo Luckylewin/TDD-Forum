@@ -48,4 +48,20 @@ class BestReplyTest extends TestCase
             ->assertStatus(403);
         $this->assertFalse($replies[0]->fresh()->isBest());
     }
+
+    /**
+     * @test 最佳回复被删除了 在话题中置之为 null
+     */
+    public function if_a_best_reply_is_deleted_then_the_thread_is_properly_updated_to_reflect_that()
+    {
+        $this->signIn();
+
+        $reply = create(Reply::class, ['user_id' => auth()->id()]);
+
+        $reply->thread->markBestReply($reply);
+
+        $this->deleteJson(route('replies.destroy', $reply));
+
+        $this->assertNull($reply->thread->fresh()->best_reply_id);
+    }
 }
