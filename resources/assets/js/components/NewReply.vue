@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="signIn">
+        <div v-if="signedIn">
             <div class="form-group">
                 <textarea name="body"
                           id="body"
@@ -50,12 +50,6 @@
             });
         },
 
-        computed:{
-            signIn() {
-                return window.App.signIn;
-            }
-        },
-
         methods: {
 
             endpoint() {
@@ -74,7 +68,7 @@
 
                                flash('回复已发送');
 
-                               this.$emit('created',data);
+                               this.$emit('created',res.data);
 
                                this.isDisabled = false;
                            }

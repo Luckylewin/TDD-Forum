@@ -54,10 +54,10 @@ Vue.prototype.authorize = function (...params) {
     if (! window.App.signIn) return false;
 
     let method = params[0],
-        user = params[1];
+        object = params[1];
 
     if (typeof method === 'string') {
-        return authorizations[method](user);
+        return authorizations[method](object);
     }
 
     return method(window.App.user);

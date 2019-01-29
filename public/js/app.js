@@ -11844,10 +11844,10 @@ Vue.prototype.authorize = function () {
     if (!window.App.signIn) return false;
 
     var method = arguments.length <= 0 ? undefined : arguments[0],
-        user = arguments.length <= 1 ? undefined : arguments[1];
+        object = arguments.length <= 1 ? undefined : arguments[1];
 
     if (typeof method === 'string') {
-        return authorizations[method](user);
+        return authorizations[method](object);
     }
 
     return method(window.App.user);
@@ -43648,8 +43648,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 var user = window.App.user;
 
 module.exports = {
-    updateReply: function updateReply(reply) {
-        return reply.user_id === user.id;
+    owns: function owns(model) {
+        var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'user_id';
+
+        return model[prop] === user.id;
     }
 };
 
@@ -44939,7 +44941,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
 
 // exports
 
@@ -44997,22 +44999,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: "reply",
-    props: ['data'],
+    props: ['reply'],
 
     components: { Favorite: __WEBPACK_IMPORTED_MODULE_0__Favorite___default.a },
 
     data: function data() {
         return {
             editing: false,
-            id: this.data.id,
-            body: this.data.body,
-            isBest: this.data.isBest,
-            reply: this.data
+            id: this.reply.id,
+            body: this.reply.body,
+            isBest: this.reply.isBest
         };
     },
     created: function created() {
@@ -45024,22 +45029,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
-    computed: {
-        signIn: function signIn() {
-            return window.App.signIn;
-        },
-        canUpdate: function canUpdate() {
-            var _this2 = this;
-
-            return this.authorize(function (user) {
-                return _this2.data.user_id === user.id;
-            });
-        }
-    },
-
     methods: {
         update: function update() {
-            var url = '/replies/' + this.data.id;
+            var url = '/replies/' + this.reply.id;
             axios.patch(url, {
                 body: this.body
             }).catch(function (error) {
@@ -45051,8 +45043,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             flash('已更新');
         },
         destroy: function destroy() {
-            axios.delete('/replies/' + this.data.id);
-            this.$emit('deleted', this.data.id);
+            axios.delete('/replies/' + this.reply.id);
+            this.$emit('deleted', this.reply.id);
         },
         editReply: function editReply() {
             this.old_body_data = this.body;
@@ -45066,9 +45058,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         markBestReply: function markBestReply() {
             this.isBest = true;
 
-            axios.post('/replies/' + this.data.id + '/best');
+            axios.post('/replies/' + this.reply.id + '/best');
 
-            window.events.$emit('best-reply-selected', this.data.id);
+            window.events.$emit('best-reply-selected', this.reply.id);
         }
     }
 });
@@ -45263,25 +45255,25 @@ var render = function() {
     {
       staticClass: "panel",
       class: _vm.isBest ? "panel-success" : "panel-default",
-      attrs: { id: "reply-" + _vm.data.id }
+      attrs: { id: "reply-" + _vm.reply.id }
     },
     [
       _c("div", { staticClass: "panel-heading" }, [
         _c("div", { staticClass: "level" }, [
           _c("h5", { staticClass: "flex" }, [
             _c("a", {
-              attrs: { href: "/profiles/" + _vm.data.owner.name },
-              domProps: { textContent: _vm._s(_vm.data.owner.name) }
+              attrs: { href: "/profiles/" + _vm.reply.owner.name },
+              domProps: { textContent: _vm._s(_vm.reply.owner.name) }
             }),
             _vm._v(
               "\r\n                    回复于 " +
-                _vm._s(_vm.data.created_at) +
+                _vm._s(_vm.reply.created_at) +
                 "\r\n                "
             )
           ]),
           _vm._v(" "),
-          _vm.signIn
-            ? _c("div", [_c("favorite", { attrs: { reply: _vm.data } })], 1)
+          _vm.signedIn
+            ? _c("div", [_c("favorite", { attrs: { reply: _vm.reply } })], 1)
             : _vm._e()
         ])
       ]),
@@ -45336,46 +45328,51 @@ var render = function() {
           : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-footer level" }, [
-        _vm.authorize("updateReply", _vm.reply)
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-xs mr-1",
-                  on: { click: _vm.editReply }
-                },
-                [_vm._v("编辑")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger btn-xs mr-1",
-                  on: { click: _vm.destroy }
-                },
-                [_vm._v("删除")]
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: !_vm.isBest,
-                expression: "! isBest"
-              }
-            ],
-            staticClass: "btn btn-xs btn-default ml-a",
-            on: { click: _vm.markBestReply }
-          },
-          [_vm._v("最佳回复")]
-        )
-      ])
+      _vm.authorize("owns", _vm.reply) ||
+      _vm.authorize("owns", _vm.reply.thread)
+        ? _c("div", { staticClass: "panel-footer level" }, [
+            _vm.authorize("owns", _vm.reply)
+              ? _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs mr-1",
+                      on: { click: _vm.editReply }
+                    },
+                    [_vm._v("编辑")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger btn-xs mr-1",
+                      on: { click: _vm.destroy }
+                    },
+                    [_vm._v("删除")]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.authorize("owns", _vm.reply.thread)
+              ? _c(
+                  "button",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.isBest,
+                        expression: "! isBest"
+                      }
+                    ],
+                    staticClass: "btn btn-xs btn-default ml-a",
+                    on: { click: _vm.markBestReply }
+                  },
+                  [_vm._v("最佳回复")]
+                )
+              : _vm._e()
+          ])
+        : _vm._e()
     ]
   )
 }
@@ -45475,7 +45472,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n\r\n", ""]);
 
 // exports
 
@@ -45544,12 +45541,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     },
 
 
-    computed: {
-        signIn: function signIn() {
-            return window.App.signIn;
-        }
-    },
-
     methods: {
         endpoint: function endpoint() {
             return location.pathname + '/replies';
@@ -45566,7 +45557,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
                     flash('回复已发送');
 
-                    _this.$emit('created', data);
+                    _this.$emit('created', res.data);
 
                     _this.isDisabled = false;
                 }
@@ -47249,7 +47240,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.signIn
+    _vm.signedIn
       ? _c("div", [
           _c("div", { staticClass: "form-group" }, [
             _c("textarea", {
@@ -47405,7 +47396,7 @@ var render = function() {
           [
             _c("reply", {
               key: reply.id,
-              attrs: { data: reply },
+              attrs: { reply: reply },
               on: {
                 deleted: function($event) {
                   _vm.remove(index)
