@@ -5,7 +5,10 @@
 @endsection
 
 @section('content')
-    <thread-view :initial-replies-count="{{ $thread->replies_count }}" inline-template>
+    <thread-view
+            :data-replies-count="{{ $thread->replies_count }}"
+            :data-locked="{{ $thread->locked  }}"
+            inline-template>
         <div class="container">
             {{--详情区域--}}
             <div class="row">
@@ -52,6 +55,8 @@
 
                             <p>
                                 <Subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></Subscribe-button>
+
+                                <button class="btn btn-default" v-if="authorize('isAdmin')" @click="locked = true">锁定话题</button>
                             </p>
                         </div>
                     </div>
@@ -59,5 +64,6 @@
             </div>
 
         </div>
+
     </thread-view>
 @endsection
