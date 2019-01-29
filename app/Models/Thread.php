@@ -100,6 +100,11 @@ class Thread extends Model
          return $reply;
      }
 
+     public function locks()
+     {
+        $this->update(['locked' => true]);
+     }
+
      // 订阅话题
      public function subscribe($userId = null)
      {

@@ -174,4 +174,16 @@ class ThreadTest extends TestCase
         });
     }
 
+    /**
+     * @test 话题可以被锁定
+     */
+    public function a_thread_can_be_locked()
+    {
+        $this->assertFalse($this->thread->locked);
+
+        $this->thread->locks();
+
+        $this->assertTrue($this->thread->locked);
+    }
+
 }
