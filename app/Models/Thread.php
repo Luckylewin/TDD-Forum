@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Components\Visits;
 use Illuminate\Database\Eloquent\Model;
 use App\Events\ThreadReceivedNewReply;
 use App\Filters\Filters;
@@ -15,6 +14,10 @@ class Thread extends Model
 
      protected $guarded = [];
      protected $with = ['creator','channel'];
+     protected $appends = ['isSubscribedTo'];
+     protected $casts = [
+         'locked' => 'boolean'
+     ];
 
      // 路由key-name
      public function getRouteKeyName()
@@ -52,7 +55,7 @@ class Thread extends Model
         });
     }
 
-    // 是否订阅访问器
+    // 是否订阅 访问器
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()->where('user_id', auth()->id())->exists();
@@ -100,12 +103,20 @@ class Thread extends Model
          return $reply;
      }
 
-     public function locks()
-     {
+    // 锁定
+    public function locked()
+    {
         $this->update(['locked' => true]);
-     }
+    }
 
-     // 订阅话题
+    // 解锁
+    public function unlocked()
+    {
+        $this->update(['locked' => false]);
+    }
+
+
+    // 订阅话题
      public function subscribe($userId = null)
      {
         $this->subscriptions()->create([

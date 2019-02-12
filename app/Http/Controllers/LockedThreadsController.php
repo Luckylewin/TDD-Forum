@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Thread;
-use Illuminate\Http\Request;
 
 class LockedThreadsController extends Controller
 {
     public function store(Thread $thread)
     {
-        $thread->locks();
+       $thread->locked();
+    }
+
+    public function destroy(Thread $thread)
+    {
+        $thread->unlocked();
     }
 }

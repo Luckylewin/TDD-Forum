@@ -22,7 +22,7 @@ class LockThreadTest extends TestCase
 
         $thread = create(Thread::class);
 
-        $thread->locks();
+        $thread->locked();
 
         $this->post($thread->path() . '/replies',[
             'body' => 'foo bar',
@@ -61,5 +61,19 @@ class LockThreadTest extends TestCase
         $this->post(route('locked-threads',$thread));
 
         $this->assertTrue(!! $thread->fresh()->locked);
+    }
+
+    /**
+     * @test 管理员可以解锁话题
+     */
+    public function administrator_can_unlock_threads()
+    {
+        $this->signIn(factory(User::class)->states('administrator')->create());
+
+        $thread = create(Thread::class,['user_id' => auth()->id(),'locked' => true]);
+
+        $this->delete(route('locked-threads.destroy', $thread));
+
+        $this->assertFalse($thread->fresh()->locked);
     }
 }
