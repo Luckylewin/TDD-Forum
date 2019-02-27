@@ -6,8 +6,10 @@ use App\Components\Trending;
 use App\Filters\ThreadsFilters;
 use App\Models\Channel;
 use App\Models\Thread;
+use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Zttp\Zttp;
 
 class ThreadsController extends Controller
 {
@@ -37,12 +39,13 @@ class ThreadsController extends Controller
         return view('threads.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Recaptcha $recaptcha)
     {
         $this->validate($request, [
             'channel_id' => 'required|exists:channels,id',
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
+            'g-recaptcha-response' => ['required', $recaptcha]
         ]);
 
         $thread = Thread::create([
