@@ -39,7 +39,7 @@
 
                             {{--谷歌人机验证--}}
                             <div class="form-group">
-                                <div class="g-recaptcha" data-sitekey="6LfuMZQUAAAAAC789-BPNYFNxYPcPeyRDXOUcEuK"></div>
+                                <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.key') }}"></div>
                             </div>
 
                             <div class="form-group">

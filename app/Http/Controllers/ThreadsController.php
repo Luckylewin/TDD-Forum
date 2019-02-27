@@ -77,6 +77,18 @@ class ThreadsController extends Controller
                 ->with('flash','话题已删除');
     }
 
+    public function update($channel,Thread $thread)
+    {
+        $this->authorize('update',$thread);
+
+        $thread->update(request()->validate([
+            'title' => 'required|spamfree',
+            'body' => 'required|spamfree',
+        ]));
+
+        return $thread;
+    }
+
     public function show($channel,Thread $thread,Trending $trending)
     {
         if (auth()->check()) {

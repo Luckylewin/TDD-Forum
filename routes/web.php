@@ -26,6 +26,7 @@ Route::get('/threads/create', 'ThreadsController@create')->middleware('must-be-c
 Route::get('/threads/{channel}', 'ThreadsController@index');
 Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('/threads', 'ThreadsController@store')->middleware('must-be-confirmed');
+Route::patch('/threads/{channel}/{thread}','ThreadsController@update');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 // 锁定话题
 Route::post('locked-threads/{thread}','LockedThreadsController@store')->name('locked-threads')->middleware('admin');
