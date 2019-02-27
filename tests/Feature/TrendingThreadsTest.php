@@ -19,7 +19,7 @@ class TrendingThreadsTest extends TestCase
      */
    public $trending;
 
-   protected function setUp()
+   protected function setUp(): void
    {
        parent::setUp();
 
