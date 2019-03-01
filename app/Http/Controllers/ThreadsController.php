@@ -8,8 +8,7 @@ use App\Models\Channel;
 use App\Models\Thread;
 use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use Zttp\Zttp;
+
 
 class ThreadsController extends Controller
 {

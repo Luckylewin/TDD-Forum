@@ -17,6 +17,7 @@
         .ml-a { margin-left: auto;}
         [v-cloak] { display: none; }
         .no-line { outline: 0!important;}
+        .level-item { margin-right: 1em; }
     </style>
     <script>
         window.App = {!! json_encode([

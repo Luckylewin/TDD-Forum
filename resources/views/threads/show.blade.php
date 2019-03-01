@@ -10,33 +10,9 @@
             {{--详情区域--}}
             <div class="row">
                 <div class="col-md-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
 
-                            <div class="level">
-                                <img src="/storage/{{ $thread->creator->avatar_path }}" alt="{{ $thread->creator->name }}" width="25" height="25" class="mr-1">
-
-                                <span class="flex">
-                                     <a href="{{ route('profile',$thread->creator) }}">{{ $thread->creator->name }}</a> posted:
-                                    {{ $thread->title }}
-                                </span>
-
-                                @can('update', $thread)
-                                    <form action="{{ $thread->path() }}" method="POST">
-                                        {{ csrf_field() }}
-                                        {{ method_field('DELETE') }}
-                                        <button type="submit" class="btn btn-link" >删除</button>
-                                    </form>
-                                @endcan
-
-                            </div>
-
-                        </div>
-
-                        <div class="panel-body">
-                            {{ $thread->body }}
-                        </div>
-                    </div>
+                    {{--话题详情区域--}}
+                    @include('threads._topic')
 
                     {{--回复区域--}}
                     <replies @removed="repliesCount--" @added="repliesCount++"></replies>
@@ -49,18 +25,14 @@
                                 <a href="#">{{ $thread->creator->name }}</a> 发布于 {{ $thread->created_at->diffForHumans() }},
                                 当前共有 <span v-text="repliesCount"></span> 个回复
                             </p>
-
                             <p>
                                 <Subscribe-button :active="{{ json_encode($thread->isSubscribedTo) }}"></Subscribe-button>
-
                                 <button :class="locked ? 'btn btn-info' : 'btn btn-default'" v-if="authorize('isAdmin')" @click="toggleLock" v-text="locked ? '解除锁定' : '锁定话题'"></button>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </thread-view>
 @endsection
